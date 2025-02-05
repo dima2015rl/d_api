@@ -52,7 +52,7 @@ async def check_answer(request: SAnswerCheckRequest):
     return {"question_id": request.question_id, "is_correct": is_correct}
 
 
-@router.get("/get_test/{test_id}", summary="Проверить ответ на вопрос")
+@router.get("/get_test/{test_id}", summary="Получить тест по айди")
 async def get_test_by_id(test_id: int):
     test = await TestDAO.get_test_with_questions_and_answers(test_id)
     if not test:
