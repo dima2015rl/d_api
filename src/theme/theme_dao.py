@@ -1,5 +1,5 @@
 from src.theme.models.answers import Answer
-from src.theme.models.question_answers import QuestionAnswer
+from src.theme.models.question_true_answers import QuestionTrueAnswer
 
 from sqlalchemy import select
 

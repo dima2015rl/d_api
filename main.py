@@ -12,7 +12,8 @@ from src.theme.models.test import Test
 from src.theme.models.question import Question
 from src.theme.models.test_questions import TestQuestion
 from src.theme.models.answers import Answer
-from src.theme.models.question_answers import QuestionAnswer
+from src.theme.models.wrong_answer import WrongAnswer
+from src.theme.models.question_true_answers import QuestionTrueAnswer
 
 
 @asynccontextmanager
@@ -21,117 +22,123 @@ async def lifespan(app: FastAPI):
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
     print("+Tables.")
-    questions_data = [
-        {"question": "Как переводится слово 'apple'?", "answers": ["Banana", "Orange", "Apple", "Pear"],
-         "correct": "Apple"},
-        {"question": "Как переводится слово 'book'?", "answers": ["Notebook", "Book", "Magazine", "Paper"],
-         "correct": "Book"},
-        {"question": "Какой из вариантов переведен как 'собака'?", "answers": ["Dog", "Cat", "Bird", "Fish"],
-         "correct": "Dog"},
-        {"question": "Какой из вариантов переводится как 'молоко'?", "answers": ["Water", "Milk", "Bread", "Cheese"],
-         "correct": "Milk"},
-        {"question": "Как переводится фраза 'Good morning'?",
-         "answers": ["Доброе утро", "Добрый вечер", "Здравствуйте", "Привет"], "correct": "Доброе утро"},
-        {"question": "Как переводится фраза 'How are you?'",
-         "answers": ["Как дела?", "Где ты?", "Что нового?", "Как ты?"], "correct": "Как дела?"},
-        {"question": "Что означает фраза 'I am hungry'?", "answers": ["Я хочу пить", "Я устал", "Я голоден", "Я весел"],
-         "correct": "Я голоден"},
-        {"question": "Какой из вариантов означает 'пожалуйста'?",
-         "answers": ["Thank you", "Sorry", "Please", "Excuse me"], "correct": "Please"},
-        {"question": "Что означает слово 'house'?", "answers": ["Квартира", "Дом", "Мебель", "Улица"],
-         "correct": "Дом"},
-        {"question": "Как переводится слово 'friend'?", "answers": ["Друг", "Сестра", "Мама", "Брат"],
-         "correct": "Друг"},
-        {"question": "Как переводится фраза 'See you later'?",
-         "answers": ["Увидимся позже", "До свидания", "Привет", "Спокойной ночи"], "correct": "Увидимся позже"},
-        {"question": "Какой из вариантов переводится как 'сегодня'?",
-         "answers": ["Tomorrow", "Yesterday", "Today", "Always"], "correct": "Today"},
-        {"question": "Как переводится фраза 'I love you'?",
-         "answers": ["Я тебя ненавижу", "Я люблю тебя", "Я боюсь тебя", "Ты мне нравишься"], "correct": "Я люблю тебя"},
-        {"question": "Какой из вариантов переводится как 'солнце'?", "answers": ["Moon", "Star", "Sun", "Cloud"],
-         "correct": "Sun"},
-        {"question": "Как переводится фраза 'What time is it?'",
-         "answers": ["Сколько времени?", "Как ты?", "Где ты?", "Когда это?"], "correct": "Сколько времени?"},
-        {"question": "Какой из вариантов переводится как 'яблоко'?", "answers": ["Pear", "Orange", "Apple", "Banana"],
-         "correct": "Apple"},
-        {"question": "Какой из вариантов означает 'погода'?", "answers": ["Weather", "Climate", "Time", "Season"],
-         "correct": "Weather"},
-        {"question": "Как переводится фраза 'Where is the bathroom?'",
-         "answers": ["Где находится ресторан?", "Где находится баня?", "Где находится туалет?", "Где находится стол?"],
-         "correct": "Где находится туалет?"},
-        {"question": "Какой из вариантов переводится как 'утро'?", "answers": ["Night", "Morning", "Noon", "Evening"],
-         "correct": "Morning"},
-        {"question": "Что означает слово 'goodbye'?", "answers": ["Привет", "Пожалуйста", "До свидания", "Извините"],
-         "correct": "До свидания"},
-    ]
-
-    # Уникальные ответы
-    unique_answers = set()
-    questions = []
+    tests_data = {
+        "Основные слова и фразы": {
+            "Изучаем легкие слова": [
+                {"text": "Как по-английски 'привет'?", "answers": ["Hello", "Bye", "Good morning"], "correct": "Hello",
+                 "points": 1},
+                {"text": "Выберите правильный перевод слова 'кошка'.", "answers": ["Dog", "Cat", "Mouse"],
+                 "correct": "Cat", "points": 2},
+                {"text": "Что означает фраза 'Thank you'?", "answers": ["Пожалуйста", "Извини", "Спасибо"],
+                 "correct": "Спасибо", "points": 2},
+                {"text": "Как сказать 'пока' по-английски?", "answers": ["Good night", "Goodbye", "See you"],
+                 "correct": "Goodbye", "points": 1},
+                {"text": "Как перевести слово 'яблоко'?", "answers": ["Banana", "Cherry", "Apple"], "correct": "Apple",
+                 "points": 3},
+                {"text": "Что мы скажем, если хотим приглашать друзей поиграть?",
+                 "answers": ["Let's play!", "Sit down!", "Go away!"], "correct": "Let's play!", "points": 3},
+                {"text": "Какое слово означает 'дом'?", "answers": ["House", "Car", "School"], "correct": "House",
+                 "points": 2},
+                {"text": "Как на английском языке будет 'мама'?", "answers": ["Mother", "Sister", "Father"],
+                 "correct": "Mother", "points": 2},
+                {"text": "Как перевести фразу 'Как дела?'?",
+                 "answers": ["What is your name?", "How are you?", "Where are you from?"], "correct": "How are you?",
+                 "points": 3},
+                {"text": "Как по-английски 'это' в контексте предмета?", "answers": ["That", "This", "These"],
+                 "correct": "This", "points": 2},
+            ],
+            "Изучаем новые слова": [
+                {"text": "Как будет 'да' по-английски?", "answers": ["Yes", "No", "Maybe"], "correct": "Yes",
+                 "points": 1},
+                {"text": "Переведите слово 'собака'.", "answers": ["Cat", "Dog", "Bird"], "correct": "Dog",
+                 "points": 2},
+                {"text": "Как перевести 'я люблю тебя'?", "answers": ["I miss you", "I love you", "I see you"],
+                 "correct": "I love you", "points": 3},
+                {"text": "Как сказать 'спасибо' по-английски?", "answers": ["Sorry", "Thank you", "Yes, please"],
+                 "correct": "Thank you", "points": 2},
+                {"text": "Как перевести слово 'школа'?", "answers": ["Office", "Playground", "School"],
+                 "correct": "School", "points": 3},
+                {"text": "Что означает фраза 'Good morning'?", "answers": ["Доброе утро", "Спокойной ночи", "Привет"],
+                 "correct": "Доброе утро", "points": 2},
+                {"text": "Как будет 'стол' на английском?", "answers": ["Chair", "Table", "Sofa"], "correct": "Table",
+                 "points": 3},
+                {"text": "Как спросить 'где это?' по-английски?",
+                 "answers": ["Where is it?", "What is it?", "How is it?"], "correct": "Where is it?", "points": 3},
+                {"text": "Как сказать 'я голоден'?", "answers": ["I am tired", "I am hungry", "I am happy"],
+                 "correct": "I am hungry", "points": 2},
+                {"text": "Что означает фраза 'Please sit down'?",
+                 "answers": ["Пожалуйста, встаньте", "Пожалуйста, сядьте", "Пожалуйста, идите"],
+                 "correct": "Пожалуйста, сядьте", "points": 3},
+            ]
+        },
+        "Животные": {
+            "Знакомимся с животными": [
+                {"text": "Как звучит слово 'кот' на английском?", "answers": ["Dog", "Cat", "Rabbit"], "correct": "Cat",
+                 "points": 2},
+                {"text": "Какое из этих животных летающее?", "answers": ["Elephant", "Tiger", "Bird"],
+                 "correct": "Bird", "points": 2},
+                {"text": "Как называют 'собака' на английском?", "answers": ["Cat", "Dog", "Fish"], "correct": "Dog",
+                 "points": 3},
+                {"text": "Какое животное является домашним?", "answers": ["Lion", "Horse", "Hamster"],
+                 "correct": "Hamster", "points": 3},
+                {"text": "Какой звук издает корова?", "answers": ["Meow", "Moo", "Bark"], "correct": "Moo",
+                 "points": 2},
+                {"text": "Какое из этих животных обитает в воде?", "answers": ["Shark", "Monkey", "Eagle"],
+                 "correct": "Shark", "points": 3},
+                {"text": "Как сказать 'жираф' на английском?", "answers": ["Giraffe", "Rhino", "Zebra"],
+                 "correct": "Giraffe", "points": 2},
+                {"text": "Какое животное самое большое на Земле?", "answers": ["Blue whale", "Elephant", "Giraffe"],
+                 "correct": "Blue whale", "points": 4},
+                {"text": "Какое слово означает 'бегемот'?", "answers": ["Hippo", "Crocodile", "Bear"],
+                 "correct": "Hippo", "points": 3},
+                {"text": "Кого называют 'королевой джунглей'?", "answers": ["Tiger", "Lion", "Cheetah"],
+                 "correct": "Lion", "points": 4},
+            ]
+        }
+    }
     async with async_session() as session:
-        async with session.begin():
-            # Создаем тему
-            theme = Theme(name="Основы английского", description="Тесты на базовые знания английского языка")
-            session.add(theme)
-            theme1 = Theme(name="Основы английского1", description="Тесты на базовые знания английского языка1")
-            session.add(theme1)
-            session.add(theme)
-            await session.flush()  # Получаем ID темы
+        async with session.begin():  # Используем `begin()`, чтобы не делать `commit()` вручную
+            for theme_name, tests in tests_data.items():
+                # Создаем тему
+                theme = Theme(name=theme_name)
+                session.add(theme)
+                await session.flush()  # Получаем `theme.id`
 
-            # Создаем тесты
-            test1 = Test(theme_id=theme.id,name="Тест_1")
-            test2 = Test(theme_id=theme.id, name="Тест_2")
-            session.add_all([test1, test2])
-            await session.flush()  # Получаем ID тестов
+                for test_name, questions in tests.items():
+                    # Создаем тест
+                    test = Test(name=test_name, theme_id=theme.id)
+                    session.add(test)
+                    await session.flush()  # Получаем `test.id`
 
-            # Уникальные ответы
-            unique_answers = set()
-            for q in questions_data:
-                unique_answers.update(q["answers"])
+                    for q_data in questions:
+                        print(q_data)
+                        # Создаем вопрос
+                        question = Question(text=q_data["text"], points=q_data["points"])
+                        session.add(question)
+                        await session.flush()  # Получаем `question.id`
 
-            # Добавляем уникальные ответы
-            answers_id_map = {}
-            for answer_text in unique_answers:
-                answer = Answer(text=answer_text)
-                session.add(answer)
-                await session.flush()  # Получаем ID ответа
-                answers_id_map[answer_text] = answer.id
+                        # Создаем список id для ответов
+                        answer_ids = []
+                        for ans_text in q_data["answers"]:
+                            answer = Answer(text=ans_text)
+                            session.add(answer)
+                            await session.flush()  # Получаем `answer.id`
+                            answer_ids.append(answer.id)
 
-            # Разделяем вопросы на два теста
-            questions_test1 = questions_data[:10]
-            questions_test2 = questions_data[10:]
+                            # Если это правильный ответ, то добавляем его в `QuestionTrueAnswer`
+                            if ans_text == q_data["correct"]:
+                                true_answer = QuestionTrueAnswer(question_id=question.id, answer_id=answer.id)
+                                session.add(true_answer)
 
-            # Добавляем вопросы для первого теста
-            for q in questions_test1:
-                question = Question(text=q["question"])
-                session.add(question)
-                await session.flush()
+                            # Если это неправильный ответ, то добавляем его в `WrongAnswer`
+                            else:
+                                wrong_answer = WrongAnswer(question_id=question.id, answer_id=answer.id)
+                                session.add(wrong_answer)
 
-                # Привязываем вопрос к тесту
-                test_question = TestQuestion(test_id=test1.id, question_id=question.id)
-                session.add(test_question)
+                        # Добавляем вопрос в тест
+                        test_question = TestQuestion(test_id=test.id, question_id=question.id)
+                        session.add(test_question)
 
-                # Привязываем правильный ответ
-                correct_answer_id = answers_id_map[q["correct"]]
-                qa = QuestionAnswer(question_id=question.id, answer_id=correct_answer_id)
-                session.add(qa)
-
-            # Добавляем вопросы для второго теста
-            for q in questions_test2:
-                question = Question(text=q["question"])
-                session.add(question)
-                await session.flush()
-
-                # Привязываем вопрос к тесту
-                test_question = TestQuestion(test_id=test2.id, question_id=question.id)
-                session.add(test_question)
-
-                # Привязываем правильный ответ
-                correct_answer_id = answers_id_map[q["correct"]]
-                qa = QuestionAnswer(question_id=question.id, answer_id=correct_answer_id)
-                session.add(qa)
-
-            print("Тесты, вопросы и ответы успешно добавлены.")
     yield
     await engine.dispose()
     print("-Tables.")

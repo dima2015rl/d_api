@@ -5,11 +5,7 @@ from sqlalchemy.orm import selectinload
 
 from database import async_session
 from src.dao.base import BaseDAO
-from src.theme.models.answers import Answer
-from src.theme.models.question import Question
-from src.theme.models.question_answers import QuestionAnswer
 from src.theme.models.test import Test
-from src.theme.models.test_questions import TestQuestion
 
 
 class TestDAO(BaseDAO):
@@ -17,7 +13,7 @@ class TestDAO(BaseDAO):
 
     @classmethod
     async def get_test_with_questions_and_answers(cls, test_id: int):
-        async with async_session() as session:
+       '''' async with async_session() as session:
             query = select(cls.model).filter_by(id=test_id).options(
                 selectinload(Test.questions).
                 selectinload(TestQuestion.question).
@@ -45,4 +41,5 @@ class TestDAO(BaseDAO):
 
                 # Присваиваем выбранные ответы вопросу
                 question.shuffled_answers = selected_answers
-        return test
+        return test'''
+       return 2
