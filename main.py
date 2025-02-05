@@ -111,7 +111,6 @@ async def lifespan(app: FastAPI):
                     await session.flush()  # Получаем `test.id`
 
                     for q_data in questions:
-                        print(q_data)
                         # Создаем вопрос
                         question = Question(text=q_data["text"], points=q_data["points"])
                         session.add(question)
