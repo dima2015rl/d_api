@@ -37,4 +37,6 @@ class SThemeResponse(BaseModel):  # Модель для ответа на зап
 class SThemeWithQuestions(BaseModel):
     id: int
     name: str
+    max_score: int
+    questions: List[SThemeRequest]
     questions: List[SQuestionBase]

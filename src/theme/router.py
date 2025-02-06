@@ -60,6 +60,7 @@ async def get_test_by_id(test_id: int):
     return SThemeWithQuestions(
         id=test.id,
         name=test.name,
+        max_score = test.max_score,
         questions=[
             SQuestionBase(
                 id=question.id,
