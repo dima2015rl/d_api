@@ -31,6 +31,7 @@ class SAnswerCheckRequest(BaseModel):  # Модель для ответа на �
 class SThemeResponse(BaseModel):  # Модель для ответа на запрос темы с тестами
     id: int
     name: str
+    max_score: int
     tests: List[STestBase]
 
 
@@ -38,5 +39,4 @@ class SThemeWithQuestions(BaseModel):
     id: int
     name: str
     max_score: int
-    questions: List[SThemeRequest]
     questions: List[SQuestionBase]

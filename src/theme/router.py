@@ -5,7 +5,7 @@ from src.auth.models import User
 from src.theme.theme_progress_dao import ThemeProgressDAO
 from src.theme.question_dao import QuestionDAO
 from src.theme.schema import SAnswerBase, SThemeResponse, SQuestionBase, SAnswerCheckRequest, SThemeRequest, \
-    SThemeWithQuestions
+    SThemeWithQuestions, STestBase
 from src.theme.test_dao import TestDAO
 from src.theme.theme_dao import ThemeDAO
 
@@ -28,12 +28,9 @@ async def get_theme_with_questions(request: SThemeRequest):
     return SThemeResponse(
         id=theme.id,
         name=theme.name,
+        max_score=theme.max_score,
         tests=[
-            {
-                "id": test.id,
-                "name": test.name
-
-            }
+            STestBase(id=test.id,name=test.name)
             for test in theme.tests  # собираем список всех тестов
         ]
     )

@@ -98,9 +98,10 @@ async def lifespan(app: FastAPI):
     }
     async with async_session() as session:
         async with session.begin():  # Используем `begin()`, чтобы не делать `commit()` вручную
+            begun = 0
             for theme_name, tests in tests_data.items():
                 # Создаем тему
-                theme = Theme(name=theme_name)
+                theme = Theme(name=theme_name,points_to_access=begun)
                 session.add(theme)
                 await session.flush()  # Получаем `theme.id`
 
@@ -113,6 +114,7 @@ async def lifespan(app: FastAPI):
                     for q_data in questions:
                         # Создаем вопрос
                         question = Question(text=q_data["text"], points=q_data["points"])
+                        begun +=q_data["points"]*1/2
                         session.add(question)
                         await session.flush()  # Получаем `question.id`
 
@@ -137,7 +139,6 @@ async def lifespan(app: FastAPI):
                         # Добавляем вопрос в тест
                         test_question = TestQuestion(test_id=test.id, question_id=question.id)
                         session.add(test_question)
-
     yield
     await engine.dispose()
     print("-Tables.")
