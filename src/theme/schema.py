@@ -40,3 +40,17 @@ class SThemeWithQuestions(BaseModel):
     name: str
     max_score: int
     questions: List[SQuestionBase]
+
+class SAnswerLightBase(BaseModel):
+    id: int
+
+class SQuestionLightBase(BaseModel):
+    id: int
+    answer:SAnswerLightBase
+
+
+
+
+class STestCheckRequest(BaseModel):
+    test_id: int
+    questions: List[SQuestionLightBase]

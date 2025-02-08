@@ -2,10 +2,11 @@ from fastapi import APIRouter, HTTPException, Depends
 
 from src.auth.dependecies import get_current_user
 from src.auth.models import User
+from src.auth.user_dao import UserDAO
 from src.theme.theme_progress_dao import ThemeProgressDAO
 from src.theme.question_dao import QuestionDAO
 from src.theme.schema import SAnswerBase, SThemeResponse, SQuestionBase, SAnswerCheckRequest, SThemeRequest, \
-    SThemeWithQuestions, STestBase
+    SThemeWithQuestions, STestBase, STestCheckRequest
 from src.theme.test_dao import TestDAO
 from src.theme.theme_dao import ThemeDAO
 
@@ -21,10 +22,12 @@ async def get_theme_len():
 
 
 @router.post("", summary="Получить тему с тестами")
-async def get_theme_with_questions(request: SThemeRequest):
+async def get_theme_with_questions(request: SThemeRequest,current_user: User = Depends(get_current_user)):
     theme = await ThemeDAO.get_theme_with_tests(request.theme_id)
     if not theme:
         raise HTTPException(status_code=404, detail="Тема не найдена")
+    if current_user.points<theme.points_to_access:
+        return {"message": "У вас недостаточно очков, чтобы отрыть эту тему"}
     return SThemeResponse(
         id=theme.id,
         name=theme.name,
@@ -47,6 +50,16 @@ async def check_answer(request: SAnswerCheckRequest):
 
     is_correct = correct_answer == request.answer_id
     return {"question_id": request.question_id, "is_correct": is_correct}
+
+
+@router.post("/questions/check_test/", summary="Проверить тест на правильность")
+async def check_answer(request: STestCheckRequest,current_user: User = Depends(get_current_user)):
+    test = await TestDAO.test_verification(request.test_id,questions=request.questions)
+    if test:
+        new_points = current_user.points + test["correct_points"]
+        new_balance = current_user.balance + test["correct_points"]
+        await UserDAO.update_points_and_balance(current_user.id, new_points,new_balance)
+        return test
 
 
 @router.get("/get_test/{test_id}", summary="Получить тест по айди")

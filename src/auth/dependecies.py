@@ -10,7 +10,6 @@ from src.auth.user_dao import UserDAO
 
 def get_token(request: Request):
     token = request.cookies.get("access_token")
-    print(token)
     if not token:
         raise HTTPException(status_code=401)
     return token

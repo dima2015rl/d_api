@@ -11,4 +11,6 @@ class User(Base):
     login: Mapped[str] = mapped_column(String, nullable=False)
     password_hash: Mapped[str] = mapped_column(String, nullable=False)
     date: Mapped[str] = mapped_column(String,nullable=False)
+    points: Mapped[int] = mapped_column(Integer,default=0,nullable=False)
+    balance: Mapped[int] = mapped_column(Integer,default=0,nullable=False)
 
