@@ -1,7 +1,7 @@
 from pydantic import BaseModel
-from sqlalchemy import select, insert, update
+from sqlalchemy import select, insert, update, delete
 
-from database import async_session
+from database import async_session, Base
 
 
 class BaseDAO:
@@ -31,10 +31,13 @@ class BaseDAO:
     @classmethod
     async def add(cls, data):
         async with async_session() as session:
-            if isinstance(data, BaseModel):
+            if isinstance(data, BaseModel):  # Если данные в формате Pydantic
                 data = data.model_dump()
-            query = insert(cls.model).values(**data)
-            await session.execute(query)
+            elif isinstance(data, Base):  # Если данные — объект SQLAlchemy
+                session.add(data)
+            else:  # Если данные — словарь
+                query = insert(cls.model).values(**data)
+                await session.execute(query)
             await session.commit()
 
     @classmethod
@@ -46,6 +49,20 @@ class BaseDAO:
                 .values(**update_data)
                 .execution_options(synchronize_session="fetch")
             )
+            await session.execute(query)
+            await session.commit()
+
+    @classmethod
+    async def delete_where(cls, **filters):
+        async with async_session() as session:
+            query = delete(cls.model)
+
+            for key, value in filters.items():
+                if isinstance(value, list):
+                    query = query.where(getattr(cls.model, key).in_(value))
+                else:
+                    query = query.where(getattr(cls.model, key) == value)
+
             await session.execute(query)
             await session.commit()
 

@@ -18,5 +18,6 @@ class SUserView(BaseModel): # посмотреть пользователя пр
     name: str
     surname: str
     login: str
-    password_hash: str
+    password: str
     date: str
+    balance: int

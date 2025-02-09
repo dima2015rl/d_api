@@ -61,6 +61,7 @@ class TestDAO(BaseDAO):
             if not test:
                 raise HTTPException(status_code=404, detail="Тест не найден")
             if test:
+                correct_questions = []
                 wrong_question_ids = []
                 questions_ids = [q.question_id for q in test.questions]
                 for q in questions:
@@ -72,11 +73,13 @@ class TestDAO(BaseDAO):
             for question in (tq.question for tq in test.questions):
                 if user_answers.get(question.id) == question.true_answer.answer_id:
                     correct_points += question.points
+                    correct_questions.append(question.id)
                 else:
                     wrong_question_ids.append(question.id)
             return {"correct_points": correct_points,
                     "max_points": max_points,
                     "test_id": test_id,
                     "percent": int(round((correct_points / max_points) * 100,0)),
-                    "wrong_questions": wrong_question_ids
+                    "wrong_questions": wrong_question_ids,
+                    "correct_questions": correct_questions
                     }

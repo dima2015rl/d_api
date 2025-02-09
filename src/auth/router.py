@@ -49,5 +49,4 @@ async def read_users_me(current_user: User = Depends(get_current_user)):
     user_data = current_user.__dict__  # Получаем атрибуты модели SQLAlchemy
     user_data['password'] = current_user.password_hash  # Преобразуем password_hash в password
     del user_data['password_hash']  # Убираем password_hash из данных
-    # Возвращаем данные через Pydantic модель
-    return SUserRegister(**user_data)
+    return SUserView(**user_data)

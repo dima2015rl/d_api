@@ -14,6 +14,7 @@ from src.theme.models.test_questions import TestQuestion
 from src.theme.models.answers import Answer
 from src.theme.models.wrong_answer import WrongAnswer
 from src.theme.models.question_true_answers import QuestionTrueAnswer
+from src.theme.models.user_test_progress import UserTestProgress
 
 
 @asynccontextmanager

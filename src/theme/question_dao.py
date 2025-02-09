@@ -15,8 +15,7 @@ class QuestionDAO(BaseDAO):
         async with async_session() as session:
             query = (
                 select(cls.model)
-                .filter_by(id=question_id)
-                .options(selectinload(Question.answers))
+                .filter_by(id=question_id).options(selectinload(Question.true_answer))
             )
             result = await session.execute(query)
             return result.scalar_one_or_none()
