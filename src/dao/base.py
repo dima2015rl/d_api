@@ -56,7 +56,6 @@ class BaseDAO:
     async def delete_where(cls, **filters):
         async with async_session() as session:
             query = delete(cls.model)
-
             for key, value in filters.items():
                 if isinstance(value, list):
                     query = query.where(getattr(cls.model, key).in_(value))

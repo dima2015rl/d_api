@@ -4,7 +4,6 @@ from typing import List
 from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
-from sqlalchemy.testing.plugin.plugin_base import options
 
 from database import async_session
 from src.dao.base import BaseDAO
@@ -20,7 +19,7 @@ class TestDAO(BaseDAO):
     model = Test
 
     @classmethod
-    async def get_test_with_questions_and_answers(cls, test_id: int):
+    async def get_test_with_questions_and_answers(cls, test_id: int) ->Test:
         async with (async_session() as session):
             # Формируем запрос для получения теста с вопросами
             query = select(cls.model).filter_by(id=test_id).options(

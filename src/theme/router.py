@@ -131,7 +131,7 @@ async def check_answer(request: STestCheckRequest, current_user: User = Depends(
 
 
 @router.get("/get_test/{test_id}", summary="Получить тест по айди")
-async def get_test_by_id(test_id: int):
+async def get_test_by_id(test_id: int, current_user: User = Depends(get_current_user)):
     test = await TestDAO.get_test_with_questions_and_answers(test_id)
     if not test:
         raise HTTPException(status_code=404, detail="Тест не найден")
