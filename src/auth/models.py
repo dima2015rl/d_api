@@ -14,7 +14,8 @@ class User(Base):
     points: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     balance: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
 
-    # Связь с прогрессом и ошибками
+    # Связь с прогрессом и ошибками и с корзиной
     test_progress: Mapped[list["UserTestProgress"]] = relationship("UserTestProgress", back_populates="user")
     incorrect_questions: Mapped[list["UserIncorrectQuestion"]] = relationship("UserIncorrectQuestion",
                                                                               back_populates="user")
+    cart = relationship("Cart", uselist=False, back_populates="user")

@@ -63,7 +63,7 @@ async def check_answer(request: STestCheckRequest, current_user: User = Depends(
 
     # Если попыток нет и с последней попытки не прошел день
     if progress and progress.attempts_left == 0:
-        if progress.last_attempt and datetime.now() - progress.last_attempt < timedelta(days=1):
+        if progress.last_attempt and datetime.now() - progress.last_attempt < timedelta(minutes=5):
             raise HTTPException(
                 status_code=400,
                 detail="Попытки закончились. Попробуйте снова через день."

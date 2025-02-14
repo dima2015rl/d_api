@@ -15,6 +15,9 @@ from src.theme.models.answers import Answer
 from src.theme.models.wrong_answer import WrongAnswer
 from src.theme.models.question_true_answers import QuestionTrueAnswer
 from src.theme.models.user_test_progress import UserTestProgress
+from src.shop.models.product import Product
+from src.shop.models.cart_product import CartProduct
+from src.shop.models.cart import Cart
 
 
 @asynccontextmanager
