@@ -145,7 +145,7 @@ async def lifespan(app: FastAPI):
                         session.add(test_question)
     yield
     await engine.dispose()
-    print("-Tables.q")
+    print("-Tables.")
 
 
 app = FastAPI(lifespan=lifespan)

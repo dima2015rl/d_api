@@ -35,12 +35,13 @@ async def login_user(response: Response, user_data: SUserAuth):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
     acess_token = create_access_token({"sub": str(user.id)})
     response.set_cookie("access_token", acess_token, httponly=True)
-    return response.status_code
+    obr = {"login": user_data.login, "id": user.id, "token": acess_token}
+    return obr
 
 
 @router.post("/logout/", summary="Пользователь выходит :<")
-async def logout_user(responce:Response):
-    responce.delete_cookie("access_token")
+async def logout_user(response:Response):
+    response.delete_cookie("access_token")
     return {"message": "Пользователь выходит :<"}
 
 

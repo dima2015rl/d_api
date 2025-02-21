@@ -5,15 +5,15 @@ from fastapi import APIRouter, HTTPException, Depends
 from src.auth.dependecies import get_current_user
 from src.auth.models import User
 from src.auth.user_dao import UserDAO
-from src.theme.DAO.user_incorrect_question_dao import UserIncorrectQuestionDAO
+from src.theme.dao.user_incorrect_question_dao import UserIncorrectQuestionDAO
 from src.theme.models.user_incorrect_questions import UserIncorrectQuestion
 from src.theme.models.user_test_progress import UserTestProgress
 from src.theme.question_dao import QuestionDAO
 from src.theme.schema import SAnswerBase, SThemeResponse, SQuestionBase, SAnswerCheckRequest, SThemeRequest, \
     SThemeWithQuestions, STestBase, STestCheckRequest
-from src.theme.DAO.test_dao import TestDAO
-from src.theme.DAO.theme_dao import ThemeDAO
-from src.theme.DAO.user_test_progress_dao import UserTestProgressDAO
+from src.theme.dao.test_dao import TestDAO
+from src.theme.dao.theme_dao import ThemeDAO
+from src.theme.dao.user_test_progress_dao import UserTestProgressDAO
 router = APIRouter(
     prefix="/themes",
     tags=["Работа с темами вопросами и тд тп"]
