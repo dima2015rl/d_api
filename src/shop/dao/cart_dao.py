@@ -8,7 +8,7 @@ class CartDAO(BaseDAO):
 
     @classmethod
     async def get_user_cart(cls, user_id: int):
-        """Получить корзину пользователя (или создать, если её нет)"""
+        """Получить корзину пользователя (или создать, если её нет )"""
         async with async_session() as session:
             query = select(Cart).filter_by(user_id=user_id)
             result = await session.execute(query)
