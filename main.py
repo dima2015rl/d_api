@@ -101,7 +101,7 @@ async def lifespan(app: FastAPI):
         }
     }
     async with async_session() as session:
-        async with session.begin():  # Используем `begin()`, чтобы не делать `commit()` вручную
+        async with session.begin():# Используем `begin()`, чтобы не делать `commit()` вручную
             begun = 0
             for theme_name, tests in tests_data.items():
                 # Создаем тему
@@ -143,6 +143,7 @@ async def lifespan(app: FastAPI):
                         # Добавляем вопрос в тест
                         test_question = TestQuestion(test_id=test.id, question_id=question.id)
                         session.add(test_question)
+
     yield
     await engine.dispose()
     print("-Tables.")

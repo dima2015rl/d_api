@@ -20,12 +20,12 @@ router = APIRouter(
 )
 
 
-@router.get("", summary="Получить количество тем")
+@router.get("",response_model=int, summary="Получить количество тем")
 async def get_theme_len():
     return len(await ThemeDAO.find_all())
 
 
-@router.post("", summary="Получить тему с тестами")
+@router.post("",response_model=SThemeResponse, summary="Получить тему с тестами")
 async def get_theme_with_questions(request: SThemeRequest,current_user: User = Depends(get_current_user)):
     theme = await ThemeDAO.get_theme_with_tests(request.theme_id)
     if not theme:
@@ -130,7 +130,7 @@ async def check_answer(request: STestCheckRequest, current_user: User = Depends(
 
 
 
-@router.get("/get_test/{test_id}", summary="Получить тест по айди")
+@router.get("/get_test/{test_id}",response_model=SThemeWithQuestions, summary="Получить тест по айди")
 async def get_test_by_id(test_id: int, current_user: User = Depends(get_current_user)):
     test = await TestDAO.get_test_with_questions_and_answers(test_id)
     if not test:

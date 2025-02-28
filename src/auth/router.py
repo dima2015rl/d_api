@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.get("/get_all/", summary="Получить всех пользователей")
+@router.get("/get_all/",response_model=list[SUserView], summary="Получить всех пользователей")
 async def get_all_users():
     return await UserDAO.find_all()
 
@@ -45,7 +45,7 @@ async def logout_user(response:Response):
     return {"message": "Пользователь выходит :<"}
 
 
-@router.get("/me/", summary="информация о пользователе")
+@router.get("/me/",response_model=SUserView, summary="информация о пользователе")
 async def read_users_me(current_user: User = Depends(get_current_user)):
     user_data = current_user.__dict__  # Получаем атрибуты модели SQLAlchemy
     user_data['password'] = current_user.password_hash  # Преобразуем password_hash в password
