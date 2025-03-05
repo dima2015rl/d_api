@@ -1,3 +1,5 @@
+from itertools import product
+
 import uvicorn
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
@@ -143,7 +145,29 @@ async def lifespan(app: FastAPI):
                         # Добавляем вопрос в тест
                         test_question = TestQuestion(test_id=test.id, question_id=question.id)
                         session.add(test_question)
-
+            product_map={"Кибер-портфель":{"price":2300,
+                                           "count":10,
+                                           "description":"Супер-крутой портфель",
+                                           },
+                         "Кибер-кирка": {"price": 1000,
+                                            "count": 25,
+                                            "description": "кирка из майнкрафта",
+                                            },
+                         "Кибер-браслет": {"price": 500,
+                                         "count": 1011,
+                                         "description": "браслет че сказать",
+                                         },
+                         "Кибер-кепка": {"price": 1500,
+                                           "count": 1011,
+                                           "description": "лучше чем кепка Гомера Симпсона",
+                                           },
+                         "Кибер-футболка": {"price": 2000,
+                                         "count": 1011,
+                                         "description": "супер тишка",
+                                         },
+            }
+            for key, value in product_map.items():
+                session.add(Product(name=key, price=value["price"], count=value["count"],description=value["description"]))
     yield
     await engine.dispose()
     print("-Tables.")

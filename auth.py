@@ -28,7 +28,6 @@ def create_access_token(data: dict) -> str:
                             config.algoritm)
     return encode_jwt
 
-
 async def authericate_user(login: str, password: str):
     user = await UserDAO.find_one_or_none(login=login)
     if not user or not verify_password(password, user.password_hash):
