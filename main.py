@@ -183,7 +183,7 @@ origins = [
 # Настройка CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # Разрешенные источники
+    allow_origins=["*"],  # Разрешенные источники
     allow_credentials=True,  # Разрешение на отправку cookies
     allow_methods=["*"],  # Разрешенные HTTP-методы (GET, POST, PUT, DELETE и т. д.)
     allow_headers=["*"],  # Разрешенные заголовки (Authorization, Content-Type и т. д.)
