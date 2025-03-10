@@ -10,7 +10,6 @@ class SProduct(BaseModel):
     count: int
     description: str
 
-
 class SCartProduct(BaseModel):
     product_id: int
     quantity: int
