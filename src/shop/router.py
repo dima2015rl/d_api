@@ -7,7 +7,7 @@ from src.auth.models import User
 from src.shop.dao.cart_dao import CartDAO
 from src.shop.dao.cart_product_dao import CartProductDAO
 from src.shop.dao.product_dao import ProductDAO
-from src.shop.schema import SProductAdd, SCartProduct, SCart, SProduct, SProductRemove
+from src.shop.schema import SProductAdd, SProduct, SProductRemove
 
 router = APIRouter(
     prefix="/shop",
