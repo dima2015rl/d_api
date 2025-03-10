@@ -24,11 +24,12 @@ async def get_item_by_id(item_id: int):
 
 @router.get("/cart/", response_model=SCart, summary="Информация о конкретной корзине пользователя")
 async def get_user_cart(current_user: User = Depends(get_current_user)):
-    return await CartDAO.get_user_cart(current_user.id)
-
+    cart = await CartDAO.get_user_cart(current_user.id)
+    return cart
+'''
 @router.get("/cart/products/", response_model=List[SCartProduct], summary="Получить товары в корзине")
 async def get_cart_products(current_user: User = Depends(get_current_user)):
-    return await CartProductDAO.get_cart_products(current_user.id)
+    return await CartProductDAO.get_cart_products(current_user.id)'''
 
 @router.post("/cart/product/", summary="Добавить товар в корзину")
 async def add_product_to_cart(request: SProductAdd, current_user: User = Depends(get_current_user)):

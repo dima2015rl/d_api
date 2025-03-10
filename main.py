@@ -147,11 +147,11 @@ async def lifespan(app: FastAPI):
                         session.add(test_question)
             product_map={"Кибер-портфель":{"price":2300,
                                            "count":10,
-                                           "description":"Супер-крутой портфель",
+                                           "description":"https://ibb.co/JSHLRJj",
                                            },
                          "Кибер-кирка": {"price": 1000,
                                             "count": 25,
-                                            "description": "кирка из майнкрафта",
+                                            "description": "https://ibb.co/BV1HJn94",
                                             },
                          "Кибер-браслет": {"price": 500,
                                          "count": 1011,
@@ -159,11 +159,11 @@ async def lifespan(app: FastAPI):
                                          },
                          "Кибер-кепка": {"price": 1500,
                                            "count": 1011,
-                                           "description": "лучше чем кепка Гомера Симпсона",
+                                           "description": "https://ibb.co/JjN6LRmn",
                                            },
                          "Кибер-футболка": {"price": 2000,
                                          "count": 1011,
-                                         "description": "супер тишка",
+                                         "description": "https://ibb.co/7JhK9tKW",
                                          },
             }
             for key, value in product_map.items():

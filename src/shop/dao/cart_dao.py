@@ -1,3 +1,4 @@
+from sqlalchemy.orm import joinedload
 from src.shop.models.cart import Cart
 from sqlalchemy import select
 from database import async_session
@@ -10,14 +11,22 @@ class CartDAO(BaseDAO):
     async def get_user_cart(cls, user_id: int):
         """Получить корзину пользователя (или создать, если её нет) """
         async with async_session() as session:
-            query = select(Cart).filter_by(user_id=user_id)
+            query = select(Cart).filter_by(user_id=user_id).options(joinedload(Cart.cart_products))
             result = await session.execute(query)
             cart = result.scalar_one_or_none()
 
             if not cart:
-                cart = Cart(user_id=user_id)
-                session.add(cart)
-                await session.commit()
-                await session.refresh(cart)
+                cart = await CartDAO.add(Cart(user_id=user_id))
 
-            return cart
+            return {
+                "id": cart.id,
+                "user_id": cart.user_id,
+                "cart_products": [
+                    {
+                        "id": cp.id,
+                        "product_id": cp.product_id,
+                        "quantity": cp.quantity,
+                    }
+                    for cp in cart.cart_products  # cart_products будет пустым, но это ок
+                ],
+            }

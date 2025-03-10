@@ -9,14 +9,7 @@ class SProduct(BaseModel):
     count: int
     description: str
 
-class SCartProduct(BaseModel):
-    product_id: int
-    quantity: int
 
-class SCart(BaseModel):
-    id: int
-    user_id: int
-    cart_products: List[SCartProduct]
 
 
 class SProductAdd(BaseModel):
