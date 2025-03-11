@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status, Response, Depends
-
+from typing import List
 from auth import get_password_hash, create_access_token, authericate_user
-from src.auth.schema import SUserRegister, SUserAuth, SUserView
+from src.auth.schema import SUserRegister, SUserAuth, SUserView, SUserPoints
 from src.auth.user_dao import UserDAO
 from src.auth.dependecies import get_current_user
 from src.auth.models import User
@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.get("/get_all/",response_model=list[SUserView], summary="Получить всех пользователей")
+@router.get("/get_all/", summary="Получить всех пользователей")
 async def get_all_users():
     return await UserDAO.find_all()
 
@@ -51,3 +51,7 @@ async def read_users_me(current_user: User = Depends(get_current_user)):
     user_data['password'] = current_user.password_hash  # Преобразуем password_hash в password
     del user_data['password_hash']  # Убираем password_hash из данных
     return SUserView(**user_data)
+
+@router.get("/liders/",  response_model= List[SUserPoints], summary="информация о лидерах")
+async def getliders(current_user: User = Depends(get_current_user)):
+    return await UserDAO.getliders()

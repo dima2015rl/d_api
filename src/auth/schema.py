@@ -21,3 +21,7 @@ class SUserView(BaseModel): # посмотреть пользователя пр
     password: str
     date: str
     balance: int
+
+class SUserPoints(BaseModel):
+    login: str
+    points: int
