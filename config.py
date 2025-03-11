@@ -1,6 +1,5 @@
-DATABASE_URL = "postgresql+asyncpg://postgres:tYPGoinBoiaLFEXOKRgcnDlQKiIpFnTJ@postgres.railway.internal:5432/railway"
+DATABASE_URL = "postgresql+asyncpg://postgres:admin@localhost:5432/postgres"
 secret_key = "asdkljhadsflkhglkajflklkdfsglkdghdghdklfsjghklhlkcvblkxcvhbjclkvxjbhlckxjvbhcvlkbj"
 algoritm = "HS256"
-
 
 
