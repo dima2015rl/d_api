@@ -31,7 +31,8 @@ async def get_theme_with_questions(request: SThemeRequest,current_user: User = D
     if not theme:
         raise HTTPException(status_code=404, detail="Тема не найдена")
     if current_user.points<theme.points_to_access:
-        return {"message": "У вас недостаточно очков, чтобы отрыть эту тему"}
+        print(theme.points_to_access, current_user.points, theme.points_to_access)
+        raise HTTPException(status_code=403,detail="У вас недостаточно очков, чтобы отрыть эту тему")
     return SThemeResponse(
         id=theme.id,
         name=theme.name,
